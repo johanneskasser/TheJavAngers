@@ -10,11 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import javafx.util.Duration;
-
-import java.awt.*;
 
 import static at.ac.fhcampuswien.App.Direction.*;
 
@@ -27,10 +24,10 @@ public class App extends Application {
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
-    public static int scoreINT = 0;
-    private final int BLOCKS_HORIZONTAL = 20;
-    private final int BLOCKS_VERTICAL = 20;
-    private final int BLOCKSIZE = 25;
+    public int scoreINT = 0;
+    private final int BLOCKS_HORIZONTAL = 30;
+    private final int BLOCKS_VERTICAL = 30;
+    private final int BLOCKSIZE = 15;
 
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
@@ -47,10 +44,7 @@ public class App extends Application {
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
         //root.setStyle("-fx-background-color: #008800;");
 
-        Text score = new Text("Score: " + scoreINT);
-        score.setTextAlignment(TextAlignment.LEFT);
-        score.setFont(Font.font(23));
-        score.setFill(Color.BLACK);
+        Text score = new Text();
 
 
         Group fullSnake = new Group();
@@ -62,7 +56,13 @@ public class App extends Application {
         food.setTranslateX((int) (Math.random() * (BLOCKS_HORIZONTAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
         food.setTranslateY((int) (Math.random() * (BLOCKS_VERTICAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
 
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.2), event -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
+            score.setText("Score: " + scoreINT);
+            score.setX(10.0);
+            score.setY(30.0);
+            score.setFont(Font.font("Arial", 20));
+            score.setFill(Color.BLACK);
+
             if (!running)
                 return;
 
@@ -102,6 +102,7 @@ public class App extends Application {
                 if (rect != tail && tail.getTranslateX() == rect.getTranslateX()
                         && tail.getTranslateY() == rect.getTranslateY()) {
                     restartGame();
+                    scoreINT = 0;
                     break;
                 }
             }
@@ -109,6 +110,7 @@ public class App extends Application {
             if (tail.getTranslateX() < 0 || tail.getTranslateX() >= BLOCKS_HORIZONTAL * BLOCKSIZE ||
                     tail.getTranslateY() < 0 || tail.getTranslateY() >= BLOCKS_VERTICAL * BLOCKSIZE) {
                 restartGame();
+                scoreINT = 0;
             }
 
             if(tail.getTranslateX() == food.getTranslateX() && tail.getTranslateY() == food.getTranslateY()) {
@@ -122,6 +124,7 @@ public class App extends Application {
                 snake.add(rect);
                 scoreINT += 100;
             }
+
         });
 
         timeline.getKeyFrames().add(keyFrame);

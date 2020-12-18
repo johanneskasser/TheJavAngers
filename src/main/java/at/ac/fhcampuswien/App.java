@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.*;
 import javafx.collections.ObservableList;
 import javafx.scene.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
+
+import java.awt.*;
 
 import static at.ac.fhcampuswien.App.Direction.*;
 
@@ -32,6 +35,7 @@ public class App extends Application {
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
     private boolean running = false;
+    private boolean startButtonPressed = false;
 
     private Timeline timeline = new Timeline();
 
@@ -42,10 +46,9 @@ public class App extends Application {
     private Parent createContent() {
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
-        //root.setStyle("-fx-background-color: #008800;");
 
         Text score = new Text();
-
+        Text gameInformation = new Text();
 
         Group fullSnake = new Group();
         snake = fullSnake.getChildren();
@@ -62,6 +65,12 @@ public class App extends Application {
             score.setY(30.0);
             score.setFont(Font.font("Arial", 20));
             score.setFill(Color.BLACK);
+            gameInformation.setText("Press ESC to pause the Game \n" +
+                    "Press ENTER to resume the Game");
+            gameInformation.setX((BLOCKS_HORIZONTAL * BLOCKSIZE)-170);
+            gameInformation.setY((BLOCKS_VERTICAL * BLOCKSIZE)-30);
+            gameInformation.setFont(Font.font("Arial",10));
+            gameInformation.setFill(Color.BLACK);
 
             if (!running)
                 return;
@@ -75,22 +84,22 @@ public class App extends Application {
             double tailY = tail.getTranslateY();
 
             switch (current_dir) {
-                case UP:
+                case UP -> {
                     tail.setTranslateX(snake.get(0).getTranslateX());
                     tail.setTranslateY(snake.get(0).getTranslateY() - BLOCKSIZE);
-                    break;
-                case DOWN:
+                }
+                case DOWN -> {
                     tail.setTranslateX(snake.get(0).getTranslateX());
                     tail.setTranslateY(snake.get(0).getTranslateY() + BLOCKSIZE);
-                    break;
-                case LEFT:
+                }
+                case LEFT -> {
                     tail.setTranslateX(snake.get(0).getTranslateX() - BLOCKSIZE);
                     tail.setTranslateY(snake.get(0).getTranslateY());
-                    break;
-                case RIGHT:
+                }
+                case RIGHT -> {
                     tail.setTranslateX(snake.get(0).getTranslateX() + BLOCKSIZE);
                     tail.setTranslateY(snake.get(0).getTranslateY());
-                    break;
+                }
             }
 
             moved = true;
@@ -130,7 +139,7 @@ public class App extends Application {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        root.getChildren().addAll(score, food, fullSnake);
+        root.getChildren().addAll(score, gameInformation, food, fullSnake);
         return root;
 
     }
@@ -142,16 +151,27 @@ public class App extends Application {
 
     public void startGame() {
         current_dir = RIGHT;
-        Rectangle head = new Rectangle(BLOCKSIZE,BLOCKSIZE);
+        Rectangle head = new Rectangle(BLOCKSIZE, BLOCKSIZE);
         snake.add(head);
         timeline.play();
         running = true;
+        startButtonPressed = false;
     }
 
     public void stopGame() {
         running = false;
         timeline.stop();
         snake.clear();
+    }
+
+    public void pauseGame() {
+        running = false;
+        timeline.stop();
+    }
+
+    public void resumeGame() {
+        running = true;
+        timeline.play();
     }
 
 
@@ -180,10 +200,17 @@ public class App extends Application {
                         if (current_dir != LEFT)
                             current_dir = RIGHT;
                         break;
+                    case ESCAPE:
+                        pauseGame();
+                        break;
                 }
             }
-
             moved = false;
+            if(!running){
+                if(event.getCode() == KeyCode.ENTER){
+                    resumeGame();
+                }
+            }
         });
 
         primaryStage.setTitle("Snake - The JavAngers");

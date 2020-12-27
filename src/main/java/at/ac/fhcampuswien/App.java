@@ -60,7 +60,7 @@ public class App extends Application {
         food.setTranslateY((int) (Math.random() * (BLOCKS_VERTICAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
-            score.setText("Score: " + scoreINT);
+            score.setText("Score: " + scoreINT + "\nHighscore: " + HighScore.get());
             score.setX(10.0);
             score.setY(30.0);
             score.setFont(Font.font("Arial", 20));
@@ -110,6 +110,7 @@ public class App extends Application {
             for (Node rect : snake) {
                 if (rect != tail && tail.getTranslateX() == rect.getTranslateX()
                         && tail.getTranslateY() == rect.getTranslateY()) {
+                    //HighScore.checkScore(scoreINT);
                     restartGame();
                     scoreINT = 0;
                     break;
@@ -118,6 +119,7 @@ public class App extends Application {
 
             if (tail.getTranslateX() < 0 || tail.getTranslateX() >= BLOCKS_HORIZONTAL * BLOCKSIZE ||
                     tail.getTranslateY() < 0 || tail.getTranslateY() >= BLOCKS_VERTICAL * BLOCKSIZE) {
+                //HighScore.checkScore(scoreINT);
                 restartGame();
                 scoreINT = 0;
             }
@@ -132,6 +134,7 @@ public class App extends Application {
 
                 snake.add(rect);
                 scoreINT += 100;
+                HighScore.checkScore(scoreINT);
             }
 
         });

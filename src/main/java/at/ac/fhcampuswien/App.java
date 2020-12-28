@@ -59,7 +59,6 @@ public class App extends Application {
         Food food = new Food(BLOCKSIZE);
         food.reposition();
 
-        //Test für Goran!
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
             score.setText("Score: " + scoreINT + "\nHighscore: " + HighScore.get());

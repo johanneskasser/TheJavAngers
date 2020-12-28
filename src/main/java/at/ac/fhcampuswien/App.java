@@ -14,8 +14,6 @@ import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
 
-import java.awt.*;
-
 import static at.ac.fhcampuswien.App.Direction.*;
 
 
@@ -60,6 +58,8 @@ public class App extends Application {
         //Creating Food
         Food food = new Food(BLOCKSIZE);
         food.reposition();
+
+        //Test für Goran!
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
             score.setText("Score: " + scoreINT + "\nHighscore: " + HighScore.get());

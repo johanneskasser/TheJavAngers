@@ -14,6 +14,7 @@ public class HighScore {
                 scoreFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("It's not a bug, its a feature!");
             }
         }
         try {
@@ -23,6 +24,7 @@ public class HighScore {
             reader.close();
             readFile.close();
         } catch (IOException e) {
+            System.out.println("It's not a bug, its a feature!");
             return result;
         }
         return result;

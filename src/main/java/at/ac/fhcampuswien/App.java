@@ -28,20 +28,24 @@ public class App extends Application {
         UP, DOWN, LEFT, RIGHT
     }
     public int scoreINT = 0;
-    private final int BLOCKS_HORIZONTAL = 30;
-    private final int BLOCKS_VERTICAL = 30;
-    private final int BLOCKSIZE = 15;
+    private static final int BLOCKS_HORIZONTAL = 30;
+    private static final int BLOCKS_VERTICAL = 30;
+    private static final int BLOCKSIZE = 15;
 
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
     private boolean running = false;
-    private boolean startButtonPressed = false;
-
     private Timeline timeline = new Timeline();
 
     private ObservableList<Node> snake;
 
+    public static int getBLOCKS_HORIZONTAL() {
+        return BLOCKS_HORIZONTAL;
+    }
 
+    public static int getBLOCKS_VERTICAL() {
+        return BLOCKS_VERTICAL;
+    }
 
     private Parent createContent() {
         Pane root = new Pane();
@@ -54,13 +58,12 @@ public class App extends Application {
         snake = fullSnake.getChildren();
 
         //Creating Food
-        Rectangle food = new Rectangle(BLOCKSIZE, BLOCKSIZE);
-        food.setFill(Color.RED);
-        food.setTranslateX((int) (Math.random() * (BLOCKS_HORIZONTAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
-        food.setTranslateY((int) (Math.random() * (BLOCKS_VERTICAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
+        Food food = new Food(BLOCKSIZE);
+        food.reposition();
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
             score.setText("Score: " + scoreINT + "\nHighscore: " + HighScore.get());
+            score.setId("scoreTextField");
             score.setX(10.0);
             score.setY(30.0);
             score.setFont(Font.font("Arial", 20));
@@ -108,8 +111,10 @@ public class App extends Application {
                 snake.add(0,tail);
 
             for (Node rect : snake) {
+                //Collision detection!
                 if (rect != tail && tail.getTranslateX() == rect.getTranslateX()
                         && tail.getTranslateY() == rect.getTranslateY()) {
+                    //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
                     restartGame();
                     scoreINT = 0;
@@ -119,14 +124,15 @@ public class App extends Application {
 
             if (tail.getTranslateX() < 0 || tail.getTranslateX() >= BLOCKS_HORIZONTAL * BLOCKSIZE ||
                     tail.getTranslateY() < 0 || tail.getTranslateY() >= BLOCKS_VERTICAL * BLOCKSIZE) {
+                //Snake went OOB, reset game.
                 //HighScore.checkScore(scoreINT);
                 restartGame();
                 scoreINT = 0;
             }
 
-            if(tail.getTranslateX() == food.getTranslateX() && tail.getTranslateY() == food.getTranslateY()) {
-                food.setTranslateX((int) (Math.random() * (BLOCKS_HORIZONTAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
-                food.setTranslateY((int) (Math.random() * (BLOCKS_VERTICAL * BLOCKSIZE - BLOCKSIZE)) / BLOCKSIZE * BLOCKSIZE);
+            if(tail.getTranslateX() == food.getPosX() && tail.getTranslateY() == food.getPosY()) {
+                //Snake got something to eat.
+                food.reposition();
 
                 Rectangle rect = new Rectangle(BLOCKSIZE, BLOCKSIZE);
                 rect.setTranslateX(tailX);
@@ -158,7 +164,6 @@ public class App extends Application {
         snake.add(head);
         timeline.play();
         running = true;
-        startButtonPressed = false;
     }
 
     public void stopGame() {

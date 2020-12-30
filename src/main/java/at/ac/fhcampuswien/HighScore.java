@@ -3,7 +3,7 @@ package at.ac.fhcampuswien;
 import java.io.*;
 
 public class HighScore {
-    private static File scoreFile = new File("build/tmp/highscore_save.txt");
+    private static final File scoreFile = new File("build/tmp/highscore_save.txt");
 
     public static String get() {
         FileReader readFile;

@@ -25,10 +25,10 @@ public class App extends Application {
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
-    public int scoreINT = 0;
-    private static final int BLOCKS_HORIZONTAL = 30;
-    private static final int BLOCKS_VERTICAL = 30;
-    private static final int BLOCKSIZE = 15;
+    Score currScore = new Score();
+    private static final int BLOCKS_HORIZONTAL = 40;
+    private static final int BLOCKS_VERTICAL = 40;
+    private static final int BLOCKSIZE = 20;
 
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
@@ -52,20 +52,21 @@ public class App extends Application {
         Text score = new Text();
         Text gameInformation = new Text();
 
+        //Create Snake Group, stores all Nodes of snake
         Group fullSnake = new Group();
+        //Store all objects of fullSnake in ObservableList<Node>
         snake = fullSnake.getChildren();
 
         //Creating Food
         Food food = new Food(BLOCKSIZE);
-        food.reposition();
+        food.setFill(Color.RED);
 
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
-            score.setText("Score: " + scoreINT + "\nHighscore: " + HighScore.get());
-            score.setId("scoreTextField");
+            score.setText("Score: " + currScore.getScoreINT() + "\nHighscore: " + HighScore.get());
             score.setX(10.0);
             score.setY(30.0);
-            score.setFont(Font.font("Arial", 20));
+            score.setFont(Font.font("Arial", 15));
             score.setFill(Color.BLACK);
             gameInformation.setText("Press ESC to pause the Game \n" +
                     "Press ENTER to resume the Game");
@@ -116,7 +117,7 @@ public class App extends Application {
                     //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
                     restartGame();
-                    scoreINT = 0;
+                    currScore.raiseScore();
                     break;
                 }
             }
@@ -126,7 +127,7 @@ public class App extends Application {
                 //Snake went OOB, reset game.
                 //HighScore.checkScore(scoreINT);
                 restartGame();
-                scoreINT = 0;
+                currScore.resetScore();
             }
 
             if(tail.getTranslateX() == food.getPosX() && tail.getTranslateY() == food.getPosY()) {
@@ -138,8 +139,8 @@ public class App extends Application {
                 rect.setTranslateY(tailY);
 
                 snake.add(rect);
-                scoreINT += 100;
-                HighScore.checkScore(scoreINT);
+                currScore.raiseScore();
+                HighScore.checkScore(currScore.getScoreINT());
             }
 
         });
@@ -149,7 +150,6 @@ public class App extends Application {
 
         root.getChildren().addAll(score, gameInformation, food, fullSnake);
         return root;
-
     }
 
     public void restartGame() {

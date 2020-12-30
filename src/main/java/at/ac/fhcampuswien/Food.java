@@ -5,37 +5,37 @@ import javafx.scene.shape.Rectangle;
 
 public class Food extends Rectangle{
     private int blocksize;
-    private final Rectangle food = new Rectangle(blocksize, blocksize);
 
     public Food(int blocksize) {
         this.blocksize = blocksize;
-        food.setHeight(blocksize);
-        food.setWidth(blocksize);
-        food.setFill(Color.RED);
+        new Rectangle(blocksize, blocksize);
+        setFill(Color.RED);
+        setTranslateX(generateNewRandomX());
+        setTranslateY(generateNewRandomY());
     }
 
     private int generateNewRandomX(){
-        return (int)(Math.random() * (App.getBLOCKS_HORIZONTAL() * blocksize - blocksize)) / (blocksize * blocksize);
+        return ((int)(Math.random() * (App.getBLOCKS_HORIZONTAL() * blocksize - blocksize)) / (blocksize * blocksize));
     }
 
     private int generateNewRandomY(){
-        return (int)(Math.random() * (App.getBLOCKS_VERTICAL() * blocksize - blocksize)) / (blocksize * blocksize);
+        return ((int)(Math.random() * (App.getBLOCKS_VERTICAL() * blocksize - blocksize)) / (blocksize * blocksize));
     }
 
     public void reposition(){
-        food.setTranslateX(generateNewRandomX());
-        food.setTranslateY(generateNewRandomY());
+        setTranslateX(generateNewRandomX());
+        setTranslateY(generateNewRandomY());
     }
 
     public Rectangle getFood() {
-        return food;
+        return this;
     }
 
     public int getPosX(){
-        return (int)this.getFood().getTranslateX();
+        return (int)getFood().getTranslateX();
     }
 
     public int getPosY(){
-        return (int)this.getFood().getTranslateY();
+        return (int)getFood().getTranslateY();
     }
 }

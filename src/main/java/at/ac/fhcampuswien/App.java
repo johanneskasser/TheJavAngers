@@ -59,7 +59,7 @@ public class App extends Application {
 
         //Creating Food
         Food food = new Food(BLOCKSIZE);
-        food.setFill(Color.RED);
+        food.reposition();
 
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {

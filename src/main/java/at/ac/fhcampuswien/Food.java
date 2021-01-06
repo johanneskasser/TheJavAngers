@@ -1,10 +1,8 @@
 package at.ac.fhcampuswien;
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-
 import java.io.File;
 import java.net.MalformedURLException;
 
@@ -13,7 +11,7 @@ public class Food extends Rectangle{
 
     public Food(int blocksize) throws MalformedURLException {
         super(blocksize, blocksize);
-        Image pizza = new Image(new File("build/tmp/pizza.jpg").toURI().toURL().toString());
+        Image pizza = new Image(String.valueOf(new File("pizza.jpg")));
         ImagePattern imagePattern = new ImagePattern(pizza);
         this.blocksize = blocksize;
         this.setFill(imagePattern);

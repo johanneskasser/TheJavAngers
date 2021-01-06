@@ -3,7 +3,7 @@ package at.ac.fhcampuswien;
 import java.io.*;
 
 public class HighScore {
-    private static final File scoreFile = new File("build/tmp/highscore_save.txt");
+    private static final File scoreFile = new File("highscore_save.txt");
 
     public static String[] get() {
         //String format: Johannes:1500
@@ -13,6 +13,9 @@ public class HighScore {
         if (!scoreFile.exists()) {
             try {
                 scoreFile.createNewFile();
+                Writer writer = new FileWriter(scoreFile);
+                writer.write("none:0");
+                writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("It's not a bug, its a feature!");

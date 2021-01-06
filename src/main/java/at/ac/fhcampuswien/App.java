@@ -14,6 +14,8 @@ import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
 
+import java.util.Scanner;
+
 import static at.ac.fhcampuswien.App.Direction.*;
 
 
@@ -36,6 +38,7 @@ public class App extends Application {
     private Timeline timeline = new Timeline();
 
     private ObservableList<Node> snake;
+    private Player currPlayer = new Player();
 
     public static int getBLOCKS_HORIZONTAL() {
         return BLOCKS_HORIZONTAL;
@@ -60,6 +63,11 @@ public class App extends Application {
         //Creating Food
         Food food = new Food(BLOCKSIZE);
         food.reposition();
+
+        //Checking if player was already created
+        if(currPlayer.checkPlayer()){
+            pauseGame();
+        }
 
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {

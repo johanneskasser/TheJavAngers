@@ -1,0 +1,41 @@
+package at.ac.fhcampuswien;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class DialogWindow {
+
+    public void showLoginScreen(){
+        Stage stage = new Stage();
+        Player player = new Player();
+
+        VBox box = new VBox();
+        box.setPadding(new Insets(10));
+        box.setAlignment(Pos.CENTER);
+
+        Label label = new Label("Please Enter your name here!");
+        TextField textName = new TextField();
+
+        Button enter = new Button("Enter");
+
+        enter.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                player.setName(textName.getText());
+                stage.close();
+            }
+        });
+        box.getChildren().addAll(label, textName, enter);
+        Scene scene = new Scene(box, 250, 150);
+        stage.setScene(scene);
+        stage.show();
+    }
+}

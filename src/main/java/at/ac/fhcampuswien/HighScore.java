@@ -5,7 +5,8 @@ import java.io.*;
 public class HighScore {
     private static final File scoreFile = new File("build/tmp/highscore_save.txt");
 
-    public static String get() {
+    public static String[] get() {
+        //String format: Johannes:1500
         FileReader readFile;
         BufferedReader reader;
         String result = "0";
@@ -25,16 +26,19 @@ public class HighScore {
             readFile.close();
         } catch (IOException e) {
             System.out.println("It's not a bug, its a feature!");
-            return result;
         }
-        return result;
+        return result.split(":");
     }
 
-    public static void checkScore(int newScore) {
-        if (newScore > Integer.parseInt(get())) {
+    public static void checkScore(int newScore, String playerName) {
+        //String format: Johannes:1500
+        String[] information = get();
+        int currentHighScore = Integer.parseInt(information[1]);
+        if (newScore > currentHighScore) {
             try{
                 Writer wr = new FileWriter(scoreFile);
-                wr.write(Integer.toString(newScore));
+                String output = playerName + ":" + newScore;
+                wr.write(output);
                 wr.close();
             } catch (IOException i){
                 i.printStackTrace();

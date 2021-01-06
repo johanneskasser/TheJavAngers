@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
 
+import java.net.MalformedURLException;
 import java.util.Scanner;
 
 import static at.ac.fhcampuswien.App.Direction.*;
@@ -48,7 +49,7 @@ public class App extends Application {
         return BLOCKS_VERTICAL;
     }
 
-    private Parent createContent() {
+    private Parent createContent() throws MalformedURLException {
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
 
@@ -66,7 +67,14 @@ public class App extends Application {
 
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
-            score.setText("Score: " + currScore.getScoreINT() + "\nHighscore: " + HighScore.get() + "\nPlayer: " + currPlayer.getName());
+            String[] information = HighScore.get();
+            int currentHighScore = Integer.parseInt(information[1]);
+
+            String playerWithSetHighScore = information[0];
+            score.setText("Score: " + currScore.getScoreINT() +
+                    "\nHighscore: " + currentHighScore +
+                    "\nHighscore set by: " + playerWithSetHighScore +
+                    "\nPlayer: " + currPlayer.getName());
             score.setX(10.0);
             score.setY(30.0);
             score.setFont(Font.font("Arial", 15));
@@ -143,7 +151,7 @@ public class App extends Application {
 
                 snake.add(rect);
                 currScore.raiseScore();
-                HighScore.checkScore(currScore.getScoreINT());
+                HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
             }
 
         });
@@ -191,7 +199,7 @@ public class App extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws MalformedURLException {
         Scene scene = new Scene(createContent());
 
 

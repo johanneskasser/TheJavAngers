@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class DialogWindow {
+    String name = "none";
 
     public void showLoginScreen(){
         Stage stage = new Stage();
@@ -29,13 +30,18 @@ public class DialogWindow {
         enter.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                player.setName(textName.getText());
                 stage.close();
+                name = textName.getText();
             }
         });
         box.getChildren().addAll(label, textName, enter);
         Scene scene = new Scene(box, 250, 150);
         stage.setScene(scene);
-        stage.show();
+        stage.setTitle("Login");
+        stage.showAndWait();
+    }
+
+    public String getNameFromDialog() {
+        return name;
     }
 }

@@ -1,7 +1,5 @@
 package at.ac.fhcampuswien;
 
-import java.util.Scanner;
-
 public class Player {
     private String name;
     private int highscore;
@@ -12,7 +10,7 @@ public class Player {
     }
 
     public Player(){
-        this.name = "";
+        this.name = "none";
     }
 
     public String getName() {
@@ -23,17 +21,17 @@ public class Player {
         this.name = name;
     }
 
-    public void createNewPlayer(){
+    private void createNewPlayer(){
         DialogWindow dialogWindow = new DialogWindow();
         dialogWindow.showLoginScreen();
+        if(!dialogWindow.getNameFromDialog().equals("none")){
+            this.setName(dialogWindow.getNameFromDialog());
+        }
     }
 
-    public boolean checkPlayer(){
-        boolean newPlayer = false;
-        if (this.getName().equals("")){
+    public void checkPlayer(){
+        if (this.getName().equals("none")){
             createNewPlayer();
-            newPlayer = true;
         }
-        return newPlayer;
     }
 }

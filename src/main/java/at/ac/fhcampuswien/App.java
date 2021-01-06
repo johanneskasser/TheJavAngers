@@ -64,14 +64,9 @@ public class App extends Application {
         Food food = new Food(BLOCKSIZE);
         food.reposition();
 
-        //Checking if player was already created
-        if(currPlayer.checkPlayer()){
-            pauseGame();
-        }
-
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
-            score.setText("Score: " + currScore.getScoreINT() + "\nHighscore: " + HighScore.get());
+            score.setText("Score: " + currScore.getScoreINT() + "\nHighscore: " + HighScore.get() + "\nPlayer: " + currPlayer.getName());
             score.setX(10.0);
             score.setY(30.0);
             score.setFont(Font.font("Arial", 15));
@@ -125,7 +120,7 @@ public class App extends Application {
                     //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
                     restartGame();
-                    currScore.raiseScore();
+                    currScore.resetScore();
                     break;
                 }
             }
@@ -189,6 +184,10 @@ public class App extends Application {
         timeline.play();
     }
 
+    public void initGame(){
+        currPlayer.checkPlayer();
+    }
+
 
 
     @Override
@@ -232,6 +231,7 @@ public class App extends Application {
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
+        initGame();
         startGame();
     }
 }

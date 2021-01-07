@@ -5,15 +5,18 @@ import javafx.animation.Timeline;
 import javafx.application.*;
 import javafx.collections.ObservableList;
 import javafx.scene.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Scanner;
 
@@ -30,8 +33,8 @@ public class App extends Application {
     }
     Score currScore = new Score();
     private static final int BLOCKS_HORIZONTAL = 40;
-    private static final int BLOCKS_VERTICAL = 40;
-    private static final int BLOCKSIZE = 20;
+    private static final int BLOCKS_VERTICAL = 30;
+    private static final int BLOCKSIZE = 30;
 
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
@@ -52,6 +55,9 @@ public class App extends Application {
     private Parent createContent() throws MalformedURLException {
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
+        root.setStyle("-fx-background-image: url('Playground.png');" +
+                        "-fx-background-position: center center;" +
+                        "-fx-background-repeat: stretch;");
 
         Text score = new Text();
         Text gameInformation = new Text();
@@ -75,16 +81,16 @@ public class App extends Application {
                     "\nHighscore: " + currentHighScore +
                     "\nHighscore set by: " + playerWithSetHighScore +
                     "\nPlayer: " + currPlayer.getName());
-            score.setX(10.0);
-            score.setY(30.0);
-            score.setFont(Font.font("Arial", 15));
-            score.setFill(Color.BLACK);
+            score.setX(30.0);
+            score.setY(40.0);
+            score.setFont(Font.font("Verdana", 20));
+            score.setFill(Color.WHITE);
             gameInformation.setText("Press ESC to pause the Game \n" +
                     "Press ENTER to resume the Game");
-            gameInformation.setX((BLOCKS_HORIZONTAL * BLOCKSIZE)-170);
-            gameInformation.setY((BLOCKS_VERTICAL * BLOCKSIZE)-30);
-            gameInformation.setFont(Font.font("Arial",10));
-            gameInformation.setFill(Color.BLACK);
+            gameInformation.setX((BLOCKS_HORIZONTAL * BLOCKSIZE)-300);
+            gameInformation.setY((BLOCKS_VERTICAL * BLOCKSIZE)-65);
+            gameInformation.setFont(Font.font("Verdana",15));
+            gameInformation.setFill(Color.WHITE);
 
             if (!running)
                 return;
@@ -145,11 +151,11 @@ public class App extends Application {
                 //Snake got something to eat.
                 food.reposition();
 
-                Rectangle rect = new Rectangle(BLOCKSIZE, BLOCKSIZE);
-                rect.setTranslateX(tailX);
-                rect.setTranslateY(tailY);
+                SnakeBody snakeBody = new SnakeBody(BLOCKSIZE);
+                snakeBody.setTranslateX(tailX);
+                snakeBody.setTranslateY(tailY);
 
-                snake.add(rect);
+                snake.add(snakeBody);
                 currScore.raiseScore();
                 HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
             }
@@ -163,15 +169,15 @@ public class App extends Application {
         return root;
     }
 
-    public void restartGame() {
+    public void restartGame(){
         stopGame();
         startGame();
     }
 
-    public void startGame() {
+    public void startGame(){
         current_dir = RIGHT;
-        Rectangle head = new Rectangle(BLOCKSIZE, BLOCKSIZE);
-        snake.add(head);
+        SnakeBody bodyElement = new SnakeBody(BLOCKSIZE);
+        snake.add(bodyElement);
         timeline.play();
         running = true;
     }

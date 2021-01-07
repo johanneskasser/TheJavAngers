@@ -4,14 +4,13 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import java.io.File;
-import java.net.MalformedURLException;
 
 public class Food extends Rectangle{
     private int blocksize;
 
-    public Food(int blocksize) throws MalformedURLException {
+    public Food(int blocksize){
         super(blocksize, blocksize);
-        Image pizza = new Image(String.valueOf(new File("pizza.jpg")));
+        Image pizza = new Image(String.valueOf(new File("pizza.png")));
         ImagePattern imagePattern = new ImagePattern(pizza);
         this.blocksize = blocksize;
         this.setFill(imagePattern);

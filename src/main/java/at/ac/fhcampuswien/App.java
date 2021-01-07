@@ -5,20 +5,13 @@ import javafx.animation.Timeline;
 import javafx.application.*;
 import javafx.collections.ObservableList;
 import javafx.scene.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.Scanner;
 
 import static at.ac.fhcampuswien.App.Direction.*;
 
@@ -39,10 +32,10 @@ public class App extends Application {
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
     private boolean running = false;
-    private Timeline timeline = new Timeline();
+    private final Timeline timeline = new Timeline();
 
     private ObservableList<Node> snake;
-    private Player currPlayer = new Player();
+    private final Player currPlayer = new Player();
 
     public static int getBLOCKS_HORIZONTAL() {
         return BLOCKS_HORIZONTAL;
@@ -52,7 +45,7 @@ public class App extends Application {
         return BLOCKS_VERTICAL;
     }
 
-    private Parent createContent() throws MalformedURLException {
+    private Parent createContent() {
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
         root.setStyle("-fx-background-image: url('Playground.png');" +
@@ -205,7 +198,7 @@ public class App extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) throws MalformedURLException {
+    public void start(Stage primaryStage) {
         Scene scene = new Scene(createContent());
 
 

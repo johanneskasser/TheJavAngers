@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 import java.io.File;
 
 public class Food extends Rectangle{
-    private int blocksize;
+    private final int blocksize;
 
     public Food(int blocksize){
         super(blocksize, blocksize);

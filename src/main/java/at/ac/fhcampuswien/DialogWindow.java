@@ -16,7 +16,6 @@ public class DialogWindow {
 
     public void showLoginScreen(){
         Stage stage = new Stage();
-        Player player = new Player();
 
         VBox box = new VBox();
         box.setPadding(new Insets(10));

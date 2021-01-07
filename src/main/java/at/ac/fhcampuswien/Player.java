@@ -2,12 +2,6 @@ package at.ac.fhcampuswien;
 
 public class Player {
     private String name;
-    private int highscore;
-
-    public Player(String name) {
-        this.name = name;
-        this.highscore = 0;
-    }
 
     public Player(){
         this.name = "none";

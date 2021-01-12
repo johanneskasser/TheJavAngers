@@ -10,7 +10,7 @@ public class Food extends Rectangle{
 
     public Food(int blocksize){
         super(blocksize, blocksize);
-        Image pizza = new Image(String.valueOf(new File("pizza.png")));
+        Image pizza = new Image(String.valueOf(new File("Images/food.png")));
         ImagePattern imagePattern = new ImagePattern(pizza);
         this.blocksize = blocksize;
         this.setFill(imagePattern);

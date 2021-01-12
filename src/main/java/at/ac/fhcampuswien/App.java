@@ -4,7 +4,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.*;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,8 +27,9 @@ public class App extends Application {
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
+
     Score currScore = new Score();
-    private static final int BLOCKS_HORIZONTAL = 40;
+    private static final int BLOCKS_HORIZONTAL = 30;
     private static final int BLOCKS_VERTICAL = 30;
     private static final int BLOCKSIZE = 30;
 
@@ -45,15 +49,26 @@ public class App extends Application {
         return BLOCKS_VERTICAL;
     }
 
+
     private Parent createContent() {
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
-        root.setStyle("-fx-background-image: url('Playground.png');" +
+        root.setStyle("-fx-background-image: url('Images/Playground2.png');" +
                         "-fx-background-position: center center;" +
                         "-fx-background-repeat: stretch;");
 
         Text score = new Text();
         Text gameInformation = new Text();
+
+        Button changeDifficultyButton = new Button("Change Difficulty");
+        changeDifficultyButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                pauseGame();
+                currPlayer.updatePlayer();
+                changeDifficultyOfGame(currPlayer.getDiffD());
+            }
+        });
 
         //Create Snake Group, stores all Nodes of snake
         Group fullSnake = new Group();
@@ -64,26 +79,26 @@ public class App extends Application {
         Food food = new Food(BLOCKSIZE);
         food.reposition();
 
-
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
             String[] information = HighScore.get();
+            String playerWithSetHighScore = information[0];
             int currentHighScore = Integer.parseInt(information[1]);
 
-            String playerWithSetHighScore = information[0];
             score.setText("Score: " + currScore.getScoreINT() +
                     "\nHighscore: " + currentHighScore +
                     "\nHighscore set by: " + playerWithSetHighScore +
-                    "\nPlayer: " + currPlayer.getName());
+                    "\nPlayer: " + currPlayer.getName() +
+                    "\nDifficulty: " + currPlayer.getDifficultySting());
             score.setX(30.0);
             score.setY(40.0);
             score.setFont(Font.font("Verdana", 20));
-            score.setFill(Color.WHITE);
+            score.setFill(Color.RED);
             gameInformation.setText("Press ESC to pause the Game \n" +
                     "Press ENTER to resume the Game");
             gameInformation.setX((BLOCKS_HORIZONTAL * BLOCKSIZE)-300);
             gameInformation.setY((BLOCKS_VERTICAL * BLOCKSIZE)-65);
             gameInformation.setFont(Font.font("Verdana",15));
-            gameInformation.setFill(Color.WHITE);
+            gameInformation.setFill(Color.RED);
 
             if (!running)
                 return;
@@ -144,7 +159,7 @@ public class App extends Application {
                 //Snake got something to eat.
                 food.reposition();
 
-                SnakeBody snakeBody = new SnakeBody(BLOCKSIZE);
+                SnakeBody snakeBody = new SnakeBody(BLOCKSIZE, "Body");
                 snakeBody.setTranslateX(tailX);
                 snakeBody.setTranslateY(tailY);
 
@@ -158,7 +173,7 @@ public class App extends Application {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        root.getChildren().addAll(score, gameInformation, food, fullSnake);
+        root.getChildren().addAll(score, gameInformation, food, fullSnake, changeDifficultyButton);
         return root;
     }
 
@@ -169,8 +184,10 @@ public class App extends Application {
 
     public void startGame(){
         current_dir = RIGHT;
-        SnakeBody bodyElement = new SnakeBody(BLOCKSIZE);
-        snake.add(bodyElement);
+        SnakeBody bodyElementHead = new SnakeBody(BLOCKSIZE, "Head");
+        snake.add(bodyElementHead);
+        SnakeBody bodyElementTail = new SnakeBody(BLOCKSIZE, "Tail");
+        snake.add(bodyElementTail);
         timeline.play();
         running = true;
     }
@@ -183,7 +200,7 @@ public class App extends Application {
 
     public void pauseGame() {
         running = false;
-        timeline.stop();
+        timeline.pause();
     }
 
     public void resumeGame() {
@@ -193,9 +210,15 @@ public class App extends Application {
 
     public void initGame(){
         currPlayer.checkPlayer();
+        pauseGame();
+        timeline.setRate(currPlayer.getDiffD());
+        startGame();
     }
 
-
+    public void changeDifficultyOfGame(double difficulty){
+        timeline.setRate(difficulty);
+        resumeGame();
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -239,6 +262,5 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         initGame();
-        startGame();
     }
 }

@@ -6,8 +6,10 @@ import javafx.application.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -15,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.Duration;
+
+import java.io.File;
 
 import static at.ac.fhcampuswien.App.Direction.*;
 
@@ -29,8 +33,7 @@ public class App extends Application {
     }
 
     Score currScore = new Score();
-    private static final int BLOCKS_HORIZONTAL = 30;
-    private static final int BLOCKS_VERTICAL = 30;
+    private final double screenBoundHeight = Screen.getPrimary().getBounds().getHeight();
     private static final int BLOCKSIZE = 30;
 
     private Direction current_dir = Direction.RIGHT;
@@ -41,21 +44,19 @@ public class App extends Application {
     private ObservableList<Node> snake;
     private final Player currPlayer = new Player();
 
-    public static int getBLOCKS_HORIZONTAL() {
-        return BLOCKS_HORIZONTAL;
-    }
 
-    public static int getBLOCKS_VERTICAL() {
-        return BLOCKS_VERTICAL;
-    }
-
-
-    private Parent createContent() {
+    private Parent createContent(int BLOCKS_HORIZONTAL, int BLOCKS_VERTICAL) {
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
-        root.setStyle("-fx-background-image: url('Images/Playground2.png');" +
-                        "-fx-background-position: center center;" +
-                        "-fx-background-repeat: stretch;");
+        Image background = new Image(String.valueOf(new File("Images/Playground2.png")));
+        BackgroundImage backgroundImage = new BackgroundImage(
+                background,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                new BackgroundSize(1.0,1.0,true, true, false, false)
+        );
+        root.setBackground(new Background(backgroundImage));
 
         Text score = new Text();
         Text gameInformation = new Text();
@@ -76,7 +77,7 @@ public class App extends Application {
         snake = fullSnake.getChildren();
 
         //Creating Food
-        Food food = new Food(BLOCKSIZE);
+        Food food = new Food(BLOCKSIZE, BLOCKS_HORIZONTAL, BLOCKS_VERTICAL);
         food.reposition();
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
@@ -229,7 +230,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Scene scene = new Scene(createContent());
+        Scene scene = new Scene(createContent(((int) screenBoundHeight / BLOCKSIZE) - 3, ((int) screenBoundHeight / BLOCKSIZE) - 3));
 
 
         scene.setOnKeyPressed(event -> {

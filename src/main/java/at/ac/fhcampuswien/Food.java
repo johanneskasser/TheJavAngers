@@ -7,21 +7,25 @@ import java.io.File;
 
 public class Food extends Rectangle{
     private final int blocksize;
+    private final int BLOCKS_HORIZONTAL;
+    private final int BLOCKS_VERTICAL;
 
-    public Food(int blocksize){
+    public Food(int blocksize, int BLOCKS_HORIZONTAL, int BLOCKS_VERTICAL){
         super(blocksize, blocksize);
         Image pizza = new Image(String.valueOf(new File("Images/food.png")));
         ImagePattern imagePattern = new ImagePattern(pizza);
         this.blocksize = blocksize;
+        this.BLOCKS_HORIZONTAL = BLOCKS_HORIZONTAL;
+        this.BLOCKS_VERTICAL = BLOCKS_VERTICAL;
         this.setFill(imagePattern);
     }
 
     private int generateNewRandomX(){
-        return ((int) (Math.random() * (App.getBLOCKS_HORIZONTAL() * blocksize - blocksize)) / blocksize * blocksize);
+        return ((int) (Math.random() * (BLOCKS_HORIZONTAL * blocksize - blocksize)) / blocksize * blocksize);
     }
 
     private int generateNewRandomY(){
-        return ((int) (Math.random() * (App.getBLOCKS_VERTICAL() * blocksize - blocksize)) / blocksize * blocksize);
+        return ((int) (Math.random() * (BLOCKS_VERTICAL * blocksize - blocksize)) / blocksize * blocksize);
     }
 
     public void reposition(){

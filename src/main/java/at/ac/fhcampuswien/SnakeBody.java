@@ -10,8 +10,8 @@ public class SnakeBody extends Rectangle {
 
     public SnakeBody(int blocksize, String type){
         super(blocksize, blocksize);
-        Image headPIC = new Image(String.valueOf(new File("Images/snakeBody2.png")));
-        Image bodyPIC = new Image(String.valueOf(new File("Images/snakeHead2.png")));
+        Image headPIC = new Image(String.valueOf(new File("Images/snakeHead2.png")));
+        Image bodyPIC = new Image(String.valueOf(new File("Images/snakeBody2.png")));
         Image tailPIC = new Image(String.valueOf(new File("Images/snakeTail.png")));
         ImagePattern imagePatternHead = new ImagePattern(headPIC);
         ImagePattern imagePatternBody = new ImagePattern(bodyPIC);

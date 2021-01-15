@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class DialogWindow {
@@ -94,6 +96,36 @@ public class DialogWindow {
         Scene scene = new Scene(vbox, 250, 150);
         stage.setScene(scene);
         stage.setTitle("Difficulty Selection");
+        stage.showAndWait();
+    }
+
+    public void showPauseScreen(){
+        Stage stage = new Stage();
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.setAlignment(Pos.CENTER);
+
+        Label text = new Label("Paused Game!");
+        text.setTextFill(Color.RED);
+        text.setFont(Font.font("Verdana", 15));
+
+
+        Label restart = new Label("Press ENTER to restart Game!");
+        restart.setTextFill(Color.RED);
+        restart.setFont(Font.font("Verdana", 10));
+
+        Button restartButton = new Button("Restart Game!");
+        restartButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+            }
+        });
+
+        vbox.getChildren().addAll(text, restart, restartButton);
+        Scene scene = new Scene(vbox, 250, 150);
+        stage.setScene(scene);
+        stage.setTitle("Paused Game");
         stage.showAndWait();
     }
 

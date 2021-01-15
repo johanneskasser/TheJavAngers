@@ -203,6 +203,13 @@ public class App extends Application {
         timeline.pause();
     }
 
+    public void pauseGamewithESC() {
+        running = false;
+        timeline.pause();
+        new DialogWindow().showPauseScreen();
+        resumeGame();
+    }
+
     public void resumeGame() {
         running = true;
         timeline.play();
@@ -245,7 +252,7 @@ public class App extends Application {
                             current_dir = RIGHT;
                         break;
                     case ESCAPE:
-                        pauseGame();
+                        pauseGamewithESC();
                         break;
                 }
             }

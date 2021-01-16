@@ -79,6 +79,8 @@ public class App extends Application {
         //Creating Food
         Food food = new Food(BLOCKSIZE, BLOCKS_HORIZONTAL, BLOCKS_VERTICAL);
         food.reposition();
+        Food foodToo = new Food(BLOCKSIZE, BLOCKS_HORIZONTAL, BLOCKS_VERTICAL);
+        foodToo.reposition();
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
             String[] information = HighScore.get();
@@ -113,6 +115,7 @@ public class App extends Application {
             double tailY = tail.getTranslateY();
 
             switch (current_dir) {
+                //define what happens when enum Direction is called. == Movement of the Snake in the following Directions
                 case UP -> {
                     tail.setTranslateX(snake.get(0).getTranslateX());
                     tail.setTranslateY(snake.get(0).getTranslateY() - BLOCKSIZE);
@@ -143,7 +146,6 @@ public class App extends Application {
                     //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
                     restartGame();
-                    currScore.resetScore();
                     break;
                 }
             }
@@ -153,20 +155,49 @@ public class App extends Application {
                 //Snake went OOB, reset game.
                 //HighScore.checkScore(scoreINT);
                 restartGame();
-                currScore.resetScore();
+            }
+
+            if(food.getState().equals("Bad") && foodToo.getState().equals("Bad")){
+                int random = (int)(Math.random() * (1 + 1) + 0);
+                switch (random){
+                    case 0:
+                        food.changeState("Good");
+                    case 1:
+                        foodToo.changeState("Good");
+                }
             }
 
             if(tail.getTranslateX() == food.getPosX() && tail.getTranslateY() == food.getPosY()) {
                 //Snake got something to eat.
-                food.reposition();
+                if(food.getState().equals("Good")){
+                    food.reposition();
 
-                SnakeBody snakeBody = new SnakeBody(BLOCKSIZE, "Body");
-                snakeBody.setTranslateX(tailX);
-                snakeBody.setTranslateY(tailY);
+                    SnakeBody snakeBody = new SnakeBody(BLOCKSIZE, "Body");
+                    snakeBody.setTranslateX(tailX);
+                    snakeBody.setTranslateY(tailY);
 
-                snake.add(snakeBody);
-                currScore.raiseScore();
-                HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
+                    snake.add(snakeBody);
+                    currScore.raiseScore();
+                    HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
+                } else {
+                    restartGame();
+                }
+
+            }
+
+            if (tail.getTranslateX() == foodToo.getPosX() && tail.getTranslateY() == foodToo.getPosY()){
+                if(foodToo.getState().equals("Good")){
+                    foodToo.reposition();
+                    SnakeBody snakeBody = new SnakeBody(BLOCKSIZE, "Body");
+                    snakeBody.setTranslateX(tailX);
+                    snakeBody.setTranslateY(tailY);
+
+                    snake.add(snakeBody);
+                    currScore.raiseScore();
+                    HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
+                } else {
+                    restartGame();
+                }
             }
 
         });
@@ -174,13 +205,14 @@ public class App extends Application {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        root.getChildren().addAll(score, gameInformation, food, fullSnake, changeDifficultyButton);
+        root.getChildren().addAll(score, gameInformation, food, foodToo, fullSnake, changeDifficultyButton);
         return root;
     }
 
     public void restartGame(){
         stopGame();
         startGame();
+        currScore.resetScore();
     }
 
     public void startGame(){

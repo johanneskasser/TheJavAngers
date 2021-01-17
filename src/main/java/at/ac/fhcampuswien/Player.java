@@ -2,11 +2,13 @@ package at.ac.fhcampuswien;
 
 public class Player {
     private String name;
+    private int score;
     double diffD;
     String difficultySting;
 
     public Player(){
         this.name = "none";
+        this.score = 0;
     }
 
     public String getName() {
@@ -55,5 +57,17 @@ public class Player {
 
     public String getDifficultySting() {
         return this.difficultySting;
+    }
+
+    public void raiseScore(){
+        this.score += 100;
+    }
+
+    public int getScore(){
+        return this.score;
+    }
+
+    public void resetScore(){
+        this.score = 0;
     }
 }

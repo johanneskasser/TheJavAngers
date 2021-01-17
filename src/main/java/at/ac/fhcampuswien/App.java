@@ -6,15 +6,18 @@ import javafx.application.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import javafx.util.Duration;
 
@@ -32,9 +35,8 @@ public class App extends Application {
         UP, DOWN, LEFT, RIGHT
     }
 
-    Score currScore = new Score();
     private final double screenBoundHeight = Screen.getPrimary().getBounds().getHeight();
-    private static final int BLOCKSIZE = 30;
+    private final int BLOCKSIZE = (int)(screenBoundHeight / 30);
 
     private Direction current_dir = Direction.RIGHT;
     private boolean moved = false;
@@ -43,6 +45,7 @@ public class App extends Application {
 
     private ObservableList<Node> snake;
     private final Player currPlayer = new Player();
+    Banner statementsBanner = new Banner();
 
 
     private Parent createContent(int BLOCKS_HORIZONTAL, int BLOCKS_VERTICAL) {
@@ -57,6 +60,7 @@ public class App extends Application {
                 new BackgroundSize(1.0,1.0,true, true, false, false)
         );
         root.setBackground(new Background(backgroundImage));
+
 
         Text score = new Text();
         Text gameInformation = new Text();
@@ -76,7 +80,7 @@ public class App extends Application {
         //Store all objects of fullSnake in ObservableList<Node>
         snake = fullSnake.getChildren();
 
-        //Creating Food
+        //Creating Food, good and bad
         Food food = new Food(BLOCKSIZE, BLOCKS_HORIZONTAL, BLOCKS_VERTICAL);
         food.reposition();
         Food foodToo = new Food(BLOCKSIZE, BLOCKS_HORIZONTAL, BLOCKS_VERTICAL);
@@ -87,7 +91,7 @@ public class App extends Application {
             String playerWithSetHighScore = information[0];
             int currentHighScore = Integer.parseInt(information[1]);
 
-            score.setText("Score: " + currScore.getScoreINT() +
+            score.setText("Score: " + currPlayer.getScore() +
                     "\nHighscore: " + currentHighScore +
                     "\nHighscore set by: " + playerWithSetHighScore +
                     "\nPlayer: " + currPlayer.getName() +
@@ -113,6 +117,10 @@ public class App extends Application {
 
             double tailX = tail.getTranslateX();
             double tailY = tail.getTranslateY();
+
+            //Centering Statement Banner in the middle of the pane.
+            statementsBanner.layoutXProperty().bind(root.widthProperty().subtract(statementsBanner.prefWidth(-1)).divide(2));
+            statementsBanner.layoutYProperty().bind(root.heightProperty().subtract(statementsBanner.prefHeight(-1)).divide(2));
 
             switch (current_dir) {
                 //define what happens when enum Direction is called. == Movement of the Snake in the following Directions
@@ -145,7 +153,7 @@ public class App extends Application {
                         && tail.getTranslateY() == rect.getTranslateY()) {
                     //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
-                    restartGame();
+                    updateBanner(1);
                     break;
                 }
             }
@@ -154,7 +162,7 @@ public class App extends Application {
                     tail.getTranslateY() < 0 || tail.getTranslateY() >= BLOCKS_VERTICAL * BLOCKSIZE) {
                 //Snake went OOB, reset game.
                 //HighScore.checkScore(scoreINT);
-                restartGame();
+                updateBanner(2);
             }
 
             if(food.getState().equals("Bad") && foodToo.getState().equals("Bad")){
@@ -177,10 +185,10 @@ public class App extends Application {
                     snakeBody.setTranslateY(tailY);
 
                     snake.add(snakeBody);
-                    currScore.raiseScore();
-                    HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
+                    currPlayer.raiseScore();
+                    HighScore.checkScore(currPlayer.getScore(), currPlayer.getName());
                 } else {
-                    restartGame();
+                    updateBanner(0);
                 }
 
             }
@@ -193,10 +201,10 @@ public class App extends Application {
                     snakeBody.setTranslateY(tailY);
 
                     snake.add(snakeBody);
-                    currScore.raiseScore();
-                    HighScore.checkScore(currScore.getScoreINT(), currPlayer.getName());
+                    currPlayer.raiseScore();
+                    HighScore.checkScore(currPlayer.getScore(), currPlayer.getName());
                 } else {
-                    restartGame();
+                    updateBanner(0);
                 }
             }
 
@@ -205,14 +213,30 @@ public class App extends Application {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        root.getChildren().addAll(score, gameInformation, food, foodToo, fullSnake, changeDifficultyButton);
+        root.getChildren().addAll(statementsBanner,score , gameInformation, food, foodToo, fullSnake, changeDifficultyButton);
         return root;
+    }
+
+    public void updateBanner(int type){
+        pauseGame();
+        String text = "";
+        if (type == 0){
+            text = "You ate rotten food.\nSnake got food poisoning and died.\nPress R to restart.";
+        } else if (type == 1){
+            text = "You ate yourself. \nSnake is vegetarian!\n Press R to restart.";
+        } else if (type == 2){
+            text = "You touched the boarder! \nSnake hit his head and died!\nPress R to restart.";
+        } else {
+            text = "You paused the game! \nPress P to play!";
+        }
+        statementsBanner.setText(text);
+        statementsBanner.setVisible(true);
     }
 
     public void restartGame(){
         stopGame();
         startGame();
-        currScore.resetScore();
+        currPlayer.resetScore();
     }
 
     public void startGame(){
@@ -234,13 +258,6 @@ public class App extends Application {
     public void pauseGame() {
         running = false;
         timeline.pause();
-    }
-
-    public void pauseGamewithESC() {
-        running = false;
-        timeline.pause();
-        new DialogWindow().showPauseScreen();
-        resumeGame();
     }
 
     public void resumeGame() {
@@ -285,14 +302,18 @@ public class App extends Application {
                             current_dir = RIGHT;
                         break;
                     case ESCAPE:
-                        pauseGamewithESC();
+                        updateBanner(3);
                         break;
                 }
             }
             moved = false;
             if(!running){
-                if(event.getCode() == KeyCode.ENTER){
+                if(event.getCode() == KeyCode.P){
                     resumeGame();
+                    statementsBanner.setVisible(false);
+                } else if (event.getCode() == KeyCode.R){
+                    restartGame();
+                    statementsBanner.setVisible(false);
                 }
             }
         });

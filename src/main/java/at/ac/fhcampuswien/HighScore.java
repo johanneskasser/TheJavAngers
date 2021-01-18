@@ -6,7 +6,7 @@ public class HighScore {
     private static final File scoreFile = new File("src/main/resources/highscore_save.txt");
 
     public static String[] get() {
-        //String format: Johannes:1500
+        //String format: Player_name:1500
         FileReader readFile;
         BufferedReader reader;
         String result = "0";
@@ -34,7 +34,7 @@ public class HighScore {
     }
 
     public static void checkScore(int newScore, String playerName) {
-        //String format: Johannes:1500
+        //String format: Player_name:1500
         String[] information = get();
         int currentHighScore = Integer.parseInt(information[1]);
         if (newScore > currentHighScore) {

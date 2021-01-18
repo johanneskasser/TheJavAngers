@@ -36,6 +36,8 @@ public class Food extends Rectangle{
         Image look = new Image(String.valueOf(new File(picture)));
         ImagePattern imagePattern = new ImagePattern(look);
         this.setFill(imagePattern);
+
+        //Actual repositioning of the food
         this.setTranslateX(generateNewRandomX());
         this.setTranslateY(generateNewRandomY());
     }

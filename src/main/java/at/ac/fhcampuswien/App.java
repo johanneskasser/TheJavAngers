@@ -3,6 +3,7 @@ package at.ac.fhcampuswien;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.*;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -101,7 +102,7 @@ public class App extends Application {
             score.setFont(Font.font("Verdana", 20));
             score.setFill(Color.RED);
             gameInformation.setText("Press ESC to pause the Game \n" +
-                    "Press ENTER to resume the Game");
+                    "Press R to resume the Game");
             gameInformation.setX((BLOCKS_HORIZONTAL * BLOCKSIZE)-300);
             gameInformation.setY((BLOCKS_VERTICAL * BLOCKSIZE)-65);
             gameInformation.setFont(Font.font("Verdana",15));
@@ -117,10 +118,6 @@ public class App extends Application {
 
             double tailX = tail.getTranslateX();
             double tailY = tail.getTranslateY();
-
-            //Centering Statement Banner in the middle of the pane.
-            statementsBanner.layoutXProperty().bind(root.widthProperty().subtract(statementsBanner.prefWidth(-1)).divide(2));
-            statementsBanner.layoutYProperty().bind(root.heightProperty().subtract(statementsBanner.prefHeight(-1)).divide(2));
 
             switch (current_dir) {
                 //define what happens when enum Direction is called. == Movement of the Snake in the following Directions
@@ -153,7 +150,7 @@ public class App extends Application {
                         && tail.getTranslateY() == rect.getTranslateY()) {
                     //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
-                    updateBanner(1);
+                    updateBanner(1, root.widthProperty(), root.heightProperty());
                     break;
                 }
             }
@@ -162,7 +159,7 @@ public class App extends Application {
                     tail.getTranslateY() < 0 || tail.getTranslateY() >= BLOCKS_VERTICAL * BLOCKSIZE) {
                 //Snake went OOB, reset game.
                 //HighScore.checkScore(scoreINT);
-                updateBanner(2);
+                updateBanner(2, root.widthProperty(), root.heightProperty());
             }
 
             if(food.getState().equals("Bad") && foodToo.getState().equals("Bad")){
@@ -188,7 +185,7 @@ public class App extends Application {
                     currPlayer.raiseScore();
                     HighScore.checkScore(currPlayer.getScore(), currPlayer.getName());
                 } else {
-                    updateBanner(0);
+                    updateBanner(0, root.widthProperty(), root.heightProperty());
                 }
 
             }
@@ -204,7 +201,7 @@ public class App extends Application {
                     currPlayer.raiseScore();
                     HighScore.checkScore(currPlayer.getScore(), currPlayer.getName());
                 } else {
-                    updateBanner(0);
+                    updateBanner(0, root.widthProperty(), root.heightProperty());
                 }
             }
 
@@ -217,7 +214,7 @@ public class App extends Application {
         return root;
     }
 
-    public void updateBanner(int type){
+    public void updateBanner(int type, ReadOnlyDoubleProperty widthRoot, ReadOnlyDoubleProperty heightRoot){
         pauseGame();
         String text = "";
         if (type == 0){
@@ -230,6 +227,8 @@ public class App extends Application {
             text = "You paused the game! \nPress P to play!";
         }
         statementsBanner.setText(text);
+        statementsBanner.layoutXProperty().bind(widthRoot.subtract(statementsBanner.prefWidth(-1)).divide(2));
+        statementsBanner.layoutYProperty().bind(heightRoot.subtract(statementsBanner.prefHeight(-1)).divide(2));
         statementsBanner.setVisible(true);
     }
 
@@ -302,7 +301,7 @@ public class App extends Application {
                             current_dir = RIGHT;
                         break;
                     case ESCAPE:
-                        updateBanner(3);
+                        updateBanner(3, scene.widthProperty(), scene.heightProperty());
                         break;
                 }
             }

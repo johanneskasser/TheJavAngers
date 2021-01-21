@@ -43,6 +43,7 @@ public class App extends Application {
     private ObservableList<Node> snake;
     private final Player currPlayer = new Player();
     Banner statementsBanner = new Banner();
+    HighScoreList highScoreList = new HighScoreList();
 
 
     private Parent createContent(int BLOCKS_HORIZONTAL, int BLOCKS_VERTICAL) {
@@ -147,6 +148,7 @@ public class App extends Application {
                     //Snake went OOB, reset game.
                     //HighScore.checkScore(scoreINT);
                     updateBanner(1, root.widthProperty(), root.heightProperty());
+                    HighScoreList.checkRecordTable(currPlayer.getName(), currPlayer.getScore(), highScoreList.getHighscoreList());
                     break;
                 }
             }
@@ -156,6 +158,7 @@ public class App extends Application {
                 //Snake went OOB, reset game.
                 //HighScore.checkScore(scoreINT);
                 updateBanner(2, root.widthProperty(), root.heightProperty());
+                HighScoreList.checkRecordTable(currPlayer.getName(), currPlayer.getScore(), highScoreList.getHighscoreList());
             }
 
             if(food.getState().equals("Bad") && foodToo.getState().equals("Bad")){
@@ -180,8 +183,10 @@ public class App extends Application {
                     snake.add(snakeBody);
                     currPlayer.raiseScore();
                     HighScore.checkScore(currPlayer.getScore(), currPlayer.getName());
+
                 } else {
                     updateBanner(0, root.widthProperty(), root.heightProperty());
+                    HighScoreList.checkRecordTable(currPlayer.getName(), currPlayer.getScore(), highScoreList.getHighscoreList());
                 }
 
             }
@@ -198,6 +203,7 @@ public class App extends Application {
                     HighScore.checkScore(currPlayer.getScore(), currPlayer.getName());
                 } else {
                     updateBanner(0, root.widthProperty(), root.heightProperty());
+                    HighScoreList.checkRecordTable(currPlayer.getName(), currPlayer.getScore(), highScoreList.getHighscoreList());
                 }
             }
 
@@ -206,7 +212,7 @@ public class App extends Application {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        root.getChildren().addAll(statementsBanner,score , gameInformation, food, foodToo, fullSnake, changeDifficultyButton);
+        root.getChildren().addAll(score, gameInformation, food, foodToo, fullSnake, changeDifficultyButton, statementsBanner);
         return root;
     }
 
@@ -214,13 +220,13 @@ public class App extends Application {
         pauseGame();
         String text = "";
         if (type == 0){
-            text = "You ate rotten food.\nSnake got food poisoning and died.\nPress R to restart.";
+            text = "You ate rotten food.\nSnake got food poisoning and died.\nPress R to restart.\nPress L to show Leaderboard.";
         } else if (type == 1){
-            text = "You ate yourself. \nSnake is vegetarian!\n Press R to restart.";
+            text = "You ate yourself. \nSnake is vegetarian!\n Press R to restart.\nPress L to show Leaderboard.";
         } else if (type == 2){
-            text = "You touched the boarder! \nSnake hit his head and died!\nPress R to restart.";
+            text = "You touched the boarder! \nSnake hit his head and died!\nPress R to restart.\nPress L to show Leaderboard.";
         } else {
-            text = "You paused the game! \nPress P to play!";
+            text = "You paused the game! \nPress P to play!\nPress L to show Leaderboard.";
         }
         statementsBanner.setText(text);
         statementsBanner.layoutXProperty().bind(widthRoot.subtract(statementsBanner.prefWidth(-1)).divide(2));
@@ -309,6 +315,9 @@ public class App extends Application {
                 } else if (event.getCode() == KeyCode.R){
                     restartGame();
                     statementsBanner.setVisible(false);
+                } else if (event.getCode() == KeyCode.L){
+                    pauseGame();
+                    new DialogWindow().showHighScoreTable(highScoreList.getHighscoreList());
                 }
             }
         });

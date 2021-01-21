@@ -6,10 +6,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class DialogWindow {
     String name = "none";
@@ -98,6 +102,57 @@ public class DialogWindow {
         stage.setTitle("Difficulty Selection");
         stage.showAndWait();
     }
+
+
+    public void showHighScoreTable(List<String> highscorelist){
+        Stage stage = new Stage();
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.setAlignment(Pos.CENTER);
+
+        HBox hBox = new HBox();
+        hBox.setPadding(new Insets(10));
+        hBox.setAlignment(Pos.CENTER);
+
+        BorderPane borderPane = new BorderPane();
+
+        HighScoreList highScoreList = new HighScoreList();
+        List<String> highscoreInfo = highScoreList.getRecordTable(highscorelist);
+
+        Label leaderboardLabel = new Label("Leaderboard:");
+        leaderboardLabel.setFont(Font.font("Monospaced", 30));
+        leaderboardLabel.setTextFill(Color.DARKBLUE);
+
+        StringBuilder stringBuilderName = new StringBuilder();
+        StringBuilder stringBuilderScore = new StringBuilder();
+
+        for (int i = 0; i < highscoreInfo.toArray().length ; i++) {
+            String[] info = highscoreInfo.get(i).split(":");
+            stringBuilderName.append(info[0]).append("    \n");
+            stringBuilderScore.append(info[1]).append("\n");
+        }
+
+        Label infoName = new Label(stringBuilderName.toString());
+        infoName.setTextFill(Color.BLACK);
+        infoName.setFont(Font.font("Monospaced", 20));
+
+        Label infoScore = new Label(stringBuilderScore.toString());
+        infoScore.setTextFill(Color.BLACK);
+        infoScore.setFont(Font.font("Monospaced", 20));
+
+        vbox.getChildren().addAll(leaderboardLabel);
+        hBox.getChildren().addAll(infoName, infoScore);
+
+        borderPane.setTop(vbox);
+        borderPane.setCenter(hBox);
+
+        Scene scene = new Scene(borderPane, 300, 400);
+        stage.setScene(scene);
+        stage.setTitle("Leaderboard");
+        stage.show();
+    }
+
+
 
     public String getNameFromDialog() {
         return name;

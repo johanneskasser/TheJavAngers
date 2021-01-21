@@ -1,0 +1,6 @@
+Mario:1200
+dwasd:700
+Karl:600
+Goran:200
+Johannes:100
+Michael:50

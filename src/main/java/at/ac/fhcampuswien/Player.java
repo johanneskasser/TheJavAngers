@@ -1,22 +1,32 @@
 package at.ac.fhcampuswien;
 
-public class Player {
-    private String name;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+import java.lang.*;
+
+public class Player{
+    private SimpleStringProperty name;
     private int score;
     double diffD;
     String difficultySting;
 
+    public Player(String name, int score){
+        this.name = new SimpleStringProperty(name);
+        this.score = score;
+    }
+
     public Player(){
-        this.name = "none";
+        this.name = new SimpleStringProperty("none");
         this.score = 0;
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String fname) {
+        name.set(fname);
     }
 
     private void createNewPlayer(){

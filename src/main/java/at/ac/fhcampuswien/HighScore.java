@@ -6,11 +6,13 @@ public class HighScore {
     private static final File scoreFile = new File("src/main/resources/highscore_save.txt");
 
     public static String[] get() {
+        //Gets highscore from file
         //String format: Player_name:1500
         FileReader readFile;
         BufferedReader reader;
         String result = "0";
         if (!scoreFile.exists()) {
+            //Creates new file if it does not exist (Error handling).
             try {
                 scoreFile.createNewFile();
                 Writer writer = new FileWriter(scoreFile);
@@ -34,6 +36,8 @@ public class HighScore {
     }
 
     public static void checkScore(int newScore, String playerName) {
+        //Checks if new highscore is set
+        //If new highscore is set, it stores new name and new score to file.
         //String format: Player_name:1500
         String[] information = get();
         int currentHighScore = Integer.parseInt(information[1]);

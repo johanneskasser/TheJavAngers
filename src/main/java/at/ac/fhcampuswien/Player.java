@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import java.lang.*;
 
@@ -10,11 +9,6 @@ public class Player{
     private int score;
     double diffD;
     String difficultySting;
-
-    public Player(String name, int score){
-        this.name = new SimpleStringProperty(name);
-        this.score = score;
-    }
 
     public Player(){
         this.name = new SimpleStringProperty("none");

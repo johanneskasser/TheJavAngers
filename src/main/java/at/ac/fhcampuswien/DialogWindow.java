@@ -11,11 +11,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class DialogWindow {
+    //UI for Interaction with users
+
     String name = "none";
     String difficultyString = "Medium";
 
@@ -120,7 +123,7 @@ public class DialogWindow {
         List<String> highscoreInfo = highScoreList.getRecordTable(highscorelist);
 
         Label leaderboardLabel = new Label("Leaderboard:");
-        leaderboardLabel.setFont(Font.font("Monospaced", 30));
+        leaderboardLabel.setFont(Font.font("Monospaced", FontWeight.BOLD, 30));
         leaderboardLabel.setTextFill(Color.DARKBLUE);
 
         StringBuilder stringBuilderName = new StringBuilder();

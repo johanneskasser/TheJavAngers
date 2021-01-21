@@ -7,6 +7,8 @@ import javafx.scene.shape.Rectangle;
 import java.io.File;
 
 public class SnakeBody extends Rectangle {
+    //elements which get added to the snake list
+
     Image headUP = new Image(String.valueOf(new File("Images/snakeHead2UP.png")));
     Image headRIGHT = new Image(String.valueOf(new File("Images/snakeHead2RIGHT.png")));
     Image headDOWN = new Image(String.valueOf(new File("Images/snakeHead2DOWN.png")));
@@ -22,11 +24,14 @@ public class SnakeBody extends Rectangle {
     ImagePattern imagePatternVERT = new ImagePattern(bodyVERT);
 
     public SnakeBody(int blocksize){
+        //Constructor for snake body element, when constructor is called it creates a rectangle
         super(blocksize, blocksize);
-        this.setFill(imagePatternHORZ);
     }
 
     public void switchType(String type, App.Direction curr_dir){
+        //Method to change the appearance of the SnakeBody element. Depends on type (Head, Body) and current direction
+        //the snake is moving in.
+
         if(type.equals("Head")) {
             switch (curr_dir) {
                 case UP -> this.setFill(imagePatternUP);

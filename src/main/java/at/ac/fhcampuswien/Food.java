@@ -6,6 +6,8 @@ import javafx.scene.shape.Rectangle;
 import java.io.File;
 
 public class Food extends Rectangle{
+    //Class where food gets initialized.
+
     private final int blocksize;
     private final int BLOCKS_HORIZONTAL;
     private final int BLOCKS_VERTICAL;
@@ -27,6 +29,7 @@ public class Food extends Rectangle{
     }
 
     public void reposition(){
+        //Method to reposition the food and randomly sets a new state to food (good or bad )
         String picture = checkType();
         if (picture.equals("Images/food.png")){
             this.setState("Good");
@@ -43,6 +46,7 @@ public class Food extends Rectangle{
     }
 
     private String checkType(){
+        //Randomly changes type of food
         int random = (int)(Math.random() * (1 + 1) + 0);
         return switch (random) {
             case 0 -> "Images/food.png";

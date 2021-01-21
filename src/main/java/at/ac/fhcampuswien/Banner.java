@@ -9,6 +9,7 @@ import javafx.scene.text.TextAlignment;
 public class Banner extends Text {
 
     public Banner(){
+        //Set Layout for the banner.
         super();
         this.setFont(Font.font("Monospaced", FontWeight.BOLD, 20));
         this.setFill(Color.RED);

@@ -4,14 +4,19 @@ import java.io.*;
 import java.util.*;
 
 public class HighScoreList {
+    //Class to keep track of Leaderboard
+
     private final List<String> highscoreList;
     private static final File SCOREFILETABLE = new File("src/main/resources/highscoreTable.txt");
 
     public HighScoreList(){
+        //Constructor, when object is initialized it reads content of the file the leaderboard is stored in.
+
         this.highscoreList = readFromFile();
     }
 
     private static List<String> readFromFile(){
+        //Method to read Leaderboard from File and store it into an List<String>
         List<String> returnList = new LinkedList<>();
         if (!SCOREFILETABLE.exists()) {
             try {
@@ -38,6 +43,9 @@ public class HighScoreList {
     }
 
     public static void checkRecordTable(String playername, int score, List<String> highscoreList){
+        //When this method is called, player name and score gets transmitted. Checks list of leaderboard and adds player to
+        //the leaderboard in the right place.
+
         for (int i = 0; i < highscoreList.toArray().length; i++) {
             String[] scorefromList = highscoreList.get(i).split(":");
             if (Integer.parseInt(scorefromList[1].replace("\n","")) < score){
@@ -49,6 +57,8 @@ public class HighScoreList {
     }
 
     public static void updateFile(List<String> highscoreList){
+        //Method to write from List which has been modified to the Leaderboard file.
+
         SCOREFILETABLE.delete();
         File newSCOREFILETABLE = new File("src/main/resources/highscoreTable.txt");
         if (!SCOREFILETABLE.exists()) {
@@ -79,6 +89,9 @@ public class HighScoreList {
     }
 
     public List<String> getRecordTable(List<String> highscoreList) {
+        //Method to return the List.
+        //if List is smaller than 5, it adds none:0 to it until it has reached the full size of 5.
+
         if(highscoreList.toArray().length < 5){
             for (int i = highscoreList.toArray().length; i < 5; i++) {
                 highscoreList.add(i, "none:0");

@@ -5,10 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.*;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.*;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -47,6 +44,8 @@ public class App extends Application {
 
 
     private Parent createContent(int BLOCKS_HORIZONTAL, int BLOCKS_VERTICAL) {
+        //Method creates a root pane, where the snake gets initialized and moves on it. When the method is called the
+        //whole game gets initialized.
         Pane root = new Pane();
         root.setPrefSize(BLOCKS_HORIZONTAL * BLOCKSIZE, BLOCKS_VERTICAL * BLOCKSIZE);
         Image background = new Image(String.valueOf(new File("Images/Playground2.png")));
@@ -75,6 +74,7 @@ public class App extends Application {
         foodToo.reposition();
 
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
+            //Keyframe, refreshes every n seconds, makes game move
             String[] information = HighScore.get();
             String playerWithSetHighScore = information[0];
             int currentHighScore = Integer.parseInt(information[1]);
@@ -215,6 +215,7 @@ public class App extends Application {
     }
 
     public void updateBanner(int type, ReadOnlyDoubleProperty widthRoot, ReadOnlyDoubleProperty heightRoot){
+        //Banner which is displayed only when game is interrupted e.g. when snake dies.
         pauseGame();
         String text = "";
         if (type == 0){
@@ -276,6 +277,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        //Main method
         Scene scene = new Scene(createContent(((int) screenBoundHeight / BLOCKSIZE) - 3, ((int) screenBoundHeight / BLOCKSIZE) - 3));
 
 

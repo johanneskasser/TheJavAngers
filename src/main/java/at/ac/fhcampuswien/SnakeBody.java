@@ -7,19 +7,38 @@ import javafx.scene.shape.Rectangle;
 import java.io.File;
 
 public class SnakeBody extends Rectangle {
+    Image headUP = new Image(String.valueOf(new File("Images/snakeHead2UP.png")));
+    Image headRIGHT = new Image(String.valueOf(new File("Images/snakeHead2RIGHT.png")));
+    Image headDOWN = new Image(String.valueOf(new File("Images/snakeHead2DOWN.png")));
+    Image headLEFT = new Image(String.valueOf(new File("Images/snakeHead2LEFT.png")));
+    ImagePattern imagePatternUP = new ImagePattern(headUP);
+    ImagePattern imagePatternRIGHT = new ImagePattern(headRIGHT);
+    ImagePattern imagePatternDOWN = new ImagePattern(headDOWN);
+    ImagePattern imagePatternLEFT = new ImagePattern(headLEFT);
 
-    public SnakeBody(int blocksize, String type){
+    Image bodyHORZ = new Image(String.valueOf(new File("Images/snakeBody2HORZ.png")));
+    Image bodyVERT = new Image(String.valueOf(new File("Images/snakeBody2VERT.png")));
+    ImagePattern imagePatternHORZ = new ImagePattern(bodyHORZ);
+    ImagePattern imagePatternVERT = new ImagePattern(bodyVERT);
+
+    public SnakeBody(int blocksize){
         super(blocksize, blocksize);
-        Image headPIC = new Image(String.valueOf(new File("Images/snakeHead2.png")));
-        Image bodyPIC = new Image(String.valueOf(new File("Images/snakeBody2.png")));
-        Image tailPIC = new Image(String.valueOf(new File("Images/snakeTail.png")));
-        ImagePattern imagePatternHead = new ImagePattern(headPIC);
-        ImagePattern imagePatternBody = new ImagePattern(bodyPIC);
-        ImagePattern imagePatternTail = new ImagePattern(tailPIC);
-        switch(type){
-            case "Head" -> this.setFill(imagePatternHead);
-            case "Body" -> this.setFill(imagePatternBody);
-            case "Tail" -> this.setFill(imagePatternTail);
+        this.setFill(imagePatternHORZ);
+    }
+
+    public void switchType(String type, App.Direction curr_dir){
+        if(type.equals("Head")) {
+            switch (curr_dir) {
+                case UP -> this.setFill(imagePatternUP);
+                case DOWN -> this.setFill(imagePatternDOWN);
+                case LEFT -> this.setFill(imagePatternLEFT);
+                case RIGHT -> this.setFill(imagePatternRIGHT);
+            }
+        } else {
+            switch(curr_dir){
+                case UP, DOWN -> this.setFill(imagePatternVERT);
+                case LEFT, RIGHT -> this.setFill(imagePatternHORZ);
+            }
         }
     }
 }

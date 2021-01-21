@@ -176,7 +176,7 @@ public class App extends Application {
                 if(food.getState().equals("Good")){
                     food.reposition();
 
-                    SnakeBody snakeBody = new SnakeBody(BLOCKSIZE, "Body");
+                    SnakeBody snakeBody = new SnakeBody(BLOCKSIZE);
                     snakeBody.setTranslateX(tailX);
                     snakeBody.setTranslateY(tailY);
 
@@ -194,7 +194,7 @@ public class App extends Application {
             if (tail.getTranslateX() == foodToo.getPosX() && tail.getTranslateY() == foodToo.getPosY()){
                 if(foodToo.getState().equals("Good")){
                     foodToo.reposition();
-                    SnakeBody snakeBody = new SnakeBody(BLOCKSIZE, "Body");
+                    SnakeBody snakeBody = new SnakeBody(BLOCKSIZE);
                     snakeBody.setTranslateX(tailX);
                     snakeBody.setTranslateY(tailY);
 
@@ -205,6 +205,11 @@ public class App extends Application {
                     updateBanner(0, root.widthProperty(), root.heightProperty());
                     HighScoreList.checkRecordTable(currPlayer.getName(), currPlayer.getScore(), highScoreList.getHighscoreList());
                 }
+            }
+
+            ((SnakeBody)snake.get(0)).switchType("Head", current_dir);
+            for (int i = 1; i < snake.size() - 1; i++) {
+                ((SnakeBody)snake.get(i)).switchType("Body", current_dir);
             }
 
         });
@@ -242,10 +247,8 @@ public class App extends Application {
 
     public void startGame(){
         current_dir = RIGHT;
-        SnakeBody bodyElementHead = new SnakeBody(BLOCKSIZE, "Head");
-        snake.add(bodyElementHead);
-        SnakeBody bodyElementTail = new SnakeBody(BLOCKSIZE, "Tail");
-        snake.add(bodyElementTail);
+        SnakeBody bodyElement = new SnakeBody(BLOCKSIZE);
+        snake.add(bodyElement);
         timeline.play();
         running = true;
     }

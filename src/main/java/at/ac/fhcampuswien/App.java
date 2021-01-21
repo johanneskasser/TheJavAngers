@@ -63,16 +63,6 @@ public class App extends Application {
         Text score = new Text();
         Text gameInformation = new Text();
 
-        Button changeDifficultyButton = new Button("Change Difficulty");
-        changeDifficultyButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                pauseGame();
-                currPlayer.updatePlayer();
-                changeDifficultyOfGame(currPlayer.getDiffD());
-            }
-        });
-
         //Create Snake Group, stores all Nodes of snake
         Group fullSnake = new Group();
         //Store all objects of fullSnake in ObservableList<Node>
@@ -207,17 +197,20 @@ public class App extends Application {
                 }
             }
 
+            //make snake look beautiful like she is!
             ((SnakeBody)snake.get(0)).switchType("Head", current_dir);
+            if(snake.size() == 2) {
+                ((SnakeBody)snake.get(1)).switchType("Body", current_dir);
+            }
             for (int i = 1; i < snake.size() - 1; i++) {
                 ((SnakeBody)snake.get(i)).switchType("Body", current_dir);
             }
-
         });
 
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        root.getChildren().addAll(score, gameInformation, food, foodToo, fullSnake, changeDifficultyButton, statementsBanner);
+        root.getChildren().addAll(score, gameInformation, food, foodToo, fullSnake, statementsBanner);
         return root;
     }
 
@@ -225,11 +218,11 @@ public class App extends Application {
         pauseGame();
         String text = "";
         if (type == 0){
-            text = "You ate rotten food.\nSnake got food poisoning and died.\nPress R to restart.\nPress L to show Leaderboard.";
+            text = "You ate rotten food.\nSnake got food poisoning and died.\nPress R to restart.\nPress L to show Leaderboard.\nPress C to change difficulty.";
         } else if (type == 1){
-            text = "You ate yourself. \nSnake is vegetarian!\n Press R to restart.\nPress L to show Leaderboard.";
+            text = "You ate yourself. \nSnake is vegetarian!\n Press R to restart.\nPress L to show Leaderboard.\nPress C to change difficulty.";
         } else if (type == 2){
-            text = "You touched the boarder! \nSnake hit his head and died!\nPress R to restart.\nPress L to show Leaderboard.";
+            text = "You touched the boarder! \nSnake hit his head and died!\nPress R to restart.\nPress L to show Leaderboard.\nPress C to change difficulty.";
         } else {
             text = "You paused the game! \nPress P to play!\nPress L to show Leaderboard.";
         }
@@ -321,6 +314,9 @@ public class App extends Application {
                 } else if (event.getCode() == KeyCode.L){
                     pauseGame();
                     new DialogWindow().showHighScoreTable(highScoreList.getHighscoreList());
+                } else if (event.getCode() == KeyCode.C){
+                    currPlayer.updatePlayer();
+                    changeDifficultyOfGame(currPlayer.getDiffD());
                 }
             }
         });

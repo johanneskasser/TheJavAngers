@@ -126,7 +126,7 @@ public class DialogWindow {
         StringBuilder stringBuilderName = new StringBuilder();
         StringBuilder stringBuilderScore = new StringBuilder();
 
-        for (int i = 0; i <= 5 ; i++) {
+        for (int i = 0; i < 5 ; i++) {
             String[] info = highscoreInfo.get(i).split(":");
             stringBuilderName.append(info[0]).append("    \n");
             stringBuilderScore.append(info[1]).append("\n");

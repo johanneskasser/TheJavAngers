@@ -1,5 +1,5 @@
 Mario:12000
 Karl:6000
 Goran:2000
-Johannes:1000
+Johannes:1200
 Michael:500

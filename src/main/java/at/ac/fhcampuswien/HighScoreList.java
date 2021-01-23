@@ -11,7 +11,6 @@ public class HighScoreList {
 
     public HighScoreList(){
         //Constructor, when object is initialized it reads content of the file the leaderboard is stored in.
-
         this.highscoreList = readFromFile();
     }
 
@@ -45,15 +44,18 @@ public class HighScoreList {
     public static void checkRecordTable(String playername, int score, List<String> highscoreList){
         //When this method is called, player name and score gets transmitted. Checks list of leaderboard and adds player to
         //the leaderboard in the right place.
-
-        for (int i = 0; i < highscoreList.toArray().length; i++) {
-            String[] scorefromList = highscoreList.get(i).split(":");
-            if (Integer.parseInt(scorefromList[1].replace("\n","")) < score){
-                highscoreList.add(i,  playername + ":" + score);
-                break;
+        if(!checkIfAlreadyInList(highscoreList, playername, score)){
+            for (int i = 0; i < highscoreList.toArray().length; i++) {
+                String[] scorefromList = highscoreList.get(i).split(":");
+                if (Integer.parseInt(scorefromList[1].replace("\n","")) < score){
+                    highscoreList.add(i,  playername + ":" + score);
+                    break;
+                }
             }
+            updateFile(highscoreList);
         }
-        updateFile(highscoreList);
+
+
     }
 
     public static void updateFile(List<String> highscoreList){
@@ -91,12 +93,23 @@ public class HighScoreList {
     public List<String> getRecordTable(List<String> highscoreList) {
         //Method to return the List.
         //if List is smaller than 5, it adds none:0 to it until it has reached the full size of 5.
-
         if(highscoreList.toArray().length < 5){
             for (int i = highscoreList.toArray().length; i < 5; i++) {
                 highscoreList.add(i, "none:0");
             }
         }
         return highscoreList;
+    }
+
+    public static boolean checkIfAlreadyInList(List<String> checkList, String nameToCheck, int scoreToCheck){
+        for (int i = 0; i < checkList.toArray().length; i++) {
+            if(checkList.get(i).contains(nameToCheck)){
+                String[] info = checkList.get(i).split(":");
+                if(Integer.parseInt(info[1]) > scoreToCheck){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

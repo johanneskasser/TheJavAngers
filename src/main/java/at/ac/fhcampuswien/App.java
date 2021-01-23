@@ -242,7 +242,9 @@ public class App extends Application {
     public void startGame(){
         current_dir = RIGHT;
         SnakeBody bodyElement = new SnakeBody(BLOCKSIZE);
+        SnakeBody bodyElement2 = new SnakeBody(BLOCKSIZE);
         snake.add(bodyElement);
+        snake.add(bodyElement2);
         timeline.play();
         running = true;
     }

@@ -26,6 +26,7 @@ public class SnakeBody extends Rectangle {
     public SnakeBody(int blocksize){
         //Constructor for snake body element, when constructor is called it creates a rectangle
         super(blocksize, blocksize);
+        this.setFill(imagePatternHORZ);
     }
 
     public void switchType(String type, App.Direction curr_dir){

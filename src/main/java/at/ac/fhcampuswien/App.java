@@ -135,8 +135,7 @@ public class App extends Application {
                 //Collision detection!
                 if (rect != tail && tail.getTranslateX() == rect.getTranslateX()
                         && tail.getTranslateY() == rect.getTranslateY()) {
-                    //Snake went OOB, reset game.
-                    //HighScore.checkScore(scoreINT);
+                    //Snake ate itself, reset game.
                     updateBanner(1, root.widthProperty(), root.heightProperty());
                     HighScoreList.checkRecordTable(currPlayer.getName(), currPlayer.getScore(), highScoreList.getHighscoreList());
                     break;
@@ -153,7 +152,7 @@ public class App extends Application {
 
             if(food.getState().equals("Bad") && foodToo.getState().equals("Bad")){
                 int random = (int)(Math.random() * (1 + 1) + 0);
-                switch (random){
+                switch (random) {
                     case 0:
                         food.changeState("Good");
                     case 1:

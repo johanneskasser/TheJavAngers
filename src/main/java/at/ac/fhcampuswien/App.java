@@ -73,7 +73,7 @@ public class App extends Application {
         Food foodToo = new Food(BLOCKSIZE, BLOCKS_HORIZONTAL, BLOCKS_VERTICAL);
         foodToo.reposition();
 
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.15), event -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.2), event -> {
             //Keyframe, refreshes every n seconds, makes game move
             String[] information = HighScore.get();
             String playerWithSetHighScore = information[0];
@@ -273,7 +273,7 @@ public class App extends Application {
 
     public void changeDifficultyOfGame(double difficulty){
         timeline.setRate(difficulty);
-        resumeGame();
+        restartGame();
     }
 
     @Override
@@ -320,6 +320,7 @@ public class App extends Application {
                 } else if (event.getCode() == KeyCode.C){
                     currPlayer.updatePlayer();
                     changeDifficultyOfGame(currPlayer.getDiffD());
+                    statementsBanner.setVisible(false);
                 }
             }
         });

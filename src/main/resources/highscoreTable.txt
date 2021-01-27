@@ -1,8 +1,11 @@
 Mario:12000
 Karl:6000
 Goran:2000
+Johannes:1400
+Johannes:1400
 Walid:1300
 Johannes:1200
 Cara:1200
+Johannes:1200
 Lorenz:1000
 Michael:500
